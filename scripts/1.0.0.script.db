@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS uptasknode;
+
+USE uptasknode;
+
+SHOW TABLES;
+
+-- creacion de tabla proyectos
+.
+.
+.
+.
+DESCRIBE proyectos;
