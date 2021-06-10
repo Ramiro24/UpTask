@@ -1,5 +1,5 @@
 const Proyectos = require('../models/Proyectos');
-
+const Tareas = require('../models/Tareas');
 
 exports.proyectosHome = async (req, res) => {
     const proyectos = await Proyectos.findAll();
@@ -51,12 +51,25 @@ exports.proyectoUrl = async (req, res, next) => {
     });
 
     const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
+
+    //consultando tareas del proyecto actual
+    const tareas = await Tareas.findAll({
+        where: {
+            proyectoId: proyecto.id
+        }//,
+        //include: [//incluyendo a que proyecto pertenece la o las tareas 
+            //esto es como hacer join
+        //    {model: Proyectos}
+        //]
+    });
+    console.log(tareas);
     if (!proyecto) return next();
 
     res.render('tareas', {
         nombrePagina: 'Tareas del proyecto',
         proyecto,
-        proyectos
+        proyectos,
+        tareas
     })
 }
 
@@ -105,13 +118,13 @@ exports.actualizarProyecto = async (req, res) => {
 
 exports.eliminarProyecto = async (req, res, next) => {
 
-    const {urlProyecto} = req.query;
+    const { urlProyecto } = req.query;
     const resultado = await Proyectos.destroy({
-        where:{
+        where: {
             url: urlProyecto
         }
     })
-    if(!resultado){
+    if (!resultado) {
         return next();
     }
     res.status(200).send('Proyecto eliminado correctamente');

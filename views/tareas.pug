@@ -4,11 +4,28 @@ block contenido
     .contenido-principal
         h1 #{nombrePagina}-#{proyecto.nombre}    
 
-        //TODO - formulario
+        form.agregar-tarea(action=`/proyectos/${proyecto.url}` method="POST")
+            .campo(for="tarea") 
+                label(for="tareas") Tarea:
+                input.nombre-tarea(type="text" name="tarea", placeholder="Nombre tarea")
+            .campo.enviar
+                input.boton.nueva-tarea(type="submit" value="Agregar")
+        
+        //pre= vardump(tareas)
 
-        //TODO - listado de pendientes
-
-        //pre=vardump(proyecto)
+        .listado-pendientes
+            ul
+              if tareas.length
+                each tarea in tareas
+                    li.tarea(data-tarea=tarea.id) 
+                        p= tarea.tarea
+                        .acciones
+                            if tarea.estado
+                                i.far.fa-check-circle.completo
+                            else 
+                                i.far.fa-check-circle
+                            i.fas.fa-trash
+              else 
 
         //acciones 
         .contenedor-acciones  

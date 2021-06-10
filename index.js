@@ -8,6 +8,7 @@ const helpers = require('./helpers');
 const db = require('./config/db');
 //importando modelo para hacer la migracion desde sequilaze
 require('./models/Proyectos');
+require('./models/Tareas');
 //con stnc hago migracion, con authenticate me conecto a una existente
 db.sync()
   .then(() => console.log('Conectado al servidor'))
