@@ -2,7 +2,12 @@ const Proyectos = require('../models/Proyectos');
 const Tareas = require('../models/Tareas');
 
 exports.proyectosHome = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    //  console.log(res.locals.usuario);
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll(
+        {where:
+            {usuarioId}
+        });
 
     res.render('index', {
         nombrePagina: 'Proyectos',
@@ -10,7 +15,12 @@ exports.proyectosHome = async (req, res) => {
     });
 }
 exports.formularioProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll(
+        {where:
+            {usuarioId}
+        });
+
 
     res.render('nuevoProyecto', {
         nombrePagina: 'Nuevo Proyecto',
@@ -19,7 +29,12 @@ exports.formularioProyecto = async (req, res) => {
 }
 
 exports.nuevoProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll(
+        {where:
+            {usuarioId}
+        });
+
 
     const { nombre } = req.body;
     let errores = [];
@@ -36,17 +51,23 @@ exports.nuevoProyecto = async (req, res) => {
     }
     else {
         //no hay erorres, insertar en db
-        await Proyectos.create({ nombre });
+        const usuarioId = res.locals.usuario.id;
+        await Proyectos.create({ nombre, usuarioId });
         res.redirect('/');
     }
 }
 
 exports.proyectoUrl = async (req, res, next) => {
-    const proyectosPromise = Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectosPromise = Proyectos.findAll(
+        {where:
+            {usuarioId}
+        });
 
     const proyectoPromise = Proyectos.findOne({
         where: {
-            url: req.params.url
+            url: req.params.url,
+            usuarioId
         }
     });
 
@@ -58,11 +79,10 @@ exports.proyectoUrl = async (req, res, next) => {
             proyectoId: proyecto.id
         }//,
         //include: [//incluyendo a que proyecto pertenece la o las tareas 
-            //esto es como hacer join
+        //esto es como hacer join
         //    {model: Proyectos}
         //]
     });
-    console.log(tareas);
     if (!proyecto) return next();
 
     res.render('tareas', {
@@ -74,11 +94,16 @@ exports.proyectoUrl = async (req, res, next) => {
 }
 
 exports.formularioEditar = async (req, res) => {
-    const proyectosPromise = Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectosPromise  = Proyectos.findAll(
+        {where:
+            {usuarioId}
+        });
 
     const proyectoPromise = Proyectos.findOne({
         where: {
-            id: req.params.id
+            id: req.params.id,
+            usuarioId
         }
     });
 
@@ -91,15 +116,21 @@ exports.formularioEditar = async (req, res) => {
     })
 }
 exports.actualizarProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectos  = await Proyectos.findAll(
+        {where:
+            {usuarioId}
+        });
 
     const { nombre } = req.body;
     let errores = [];
+
     if (!nombre) {
         errores.push({ 'texto': 'agrega un nombre al proyecto' })
     }
-    //si hay errores
+
     if (errores.length > 0) {
+
         res.render('nuevoProyecto', {
             nombrePagina: 'Nuevo Proyecto',
             errores,
@@ -107,7 +138,7 @@ exports.actualizarProyecto = async (req, res) => {
         });
     }
     else {
-        //no hay erorres, insertar en db
+
         await Proyectos.update(
             { nombre: nombre },
             { where: { id: req.params.id } }

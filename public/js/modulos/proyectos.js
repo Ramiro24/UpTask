@@ -5,7 +5,7 @@ const btnEliminar = document.querySelector('#eliminar-proyecto');
 if (btnEliminar) {
     btnEliminar.addEventListener('click', e => {
         const urlProyecto = e.target.dataset.proyectoUrl;
-        // console.log(urlProyecto);
+      
         Swal.fire({
             title: 'Deseas borrar este proyecto?',
             text: "Un proyecto eliminado no se puede recuperar",
@@ -21,7 +21,6 @@ if (btnEliminar) {
                 const url = `${location.origin}/proyectos/${urlProyecto}`;
                 axios.delete(url, { params: { urlProyecto } })
                     .then(x => {
-                        console.log(x);
                         Swal.fire(
                             'Proyecto Eliminado',
                             'El proyecto se ha eliminado',

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from 'sweetalert2';
+import {actualizarAvance} from  '../funciones/avance';
 
 const tareas = document.querySelector('.listado-pendientes');
 
@@ -7,19 +8,18 @@ if (tareas) {
   tareas.addEventListener('click', (e) => {
     //cambiando estado de tarea
     if (e.target.classList.contains('fa-check-circle')) {
-      //console.log('Actualizando...');
+     
       const icono = e.target;
       const idTarea = icono.parentElement.parentElement.dataset.tarea;
-      //console.log(idTarea);
-
+    
       //request hacia /tareas/:id
       const url = `${location.origin}/tareas/${idTarea}`;
 
       axios.patch(url, { idTarea })
         .then(res => {
-          console.log(res);
           if (res.status === 200)
             icono.classList.toggle('completo');
+            actualizarAvance();
         });
     }
     //eliminando tarea
@@ -38,7 +38,7 @@ if (tareas) {
         cancelButtonText: 'No, Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          //console.log('eliminando')
+  
           //enviar delete por medio de axios
           const url = `${location.origin}/tareas/${idTarea}`;
           //siempre que usa delete le pasa params
@@ -53,6 +53,7 @@ if (tareas) {
                   res.data,
                   'success'
                 )
+                actualizarAvance();
               }
             })
         }

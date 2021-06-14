@@ -24,7 +24,6 @@ exports.agregarTarea = async (req, res, next) => {
 
 exports.cambiarEstadoTarea = async (req, res, next) => {
     //con req.query no funciona, solo con params
-    //console.log(req.params);
     const { id } = req.params;
     const tarea = await Tareas.findOne({
         where: {

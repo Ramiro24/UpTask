@@ -10,22 +10,29 @@ block contenido
                 input.nombre-tarea(type="text" name="tarea", placeholder="Nombre tarea")
             .campo.enviar
                 input.boton.nueva-tarea(type="submit" value="Agregar")
-        
-        //pre= vardump(tareas)
+
 
         .listado-pendientes
             ul
-              if tareas.length
-                each tarea in tareas
-                    li.tarea(data-tarea=tarea.id) 
-                        p= tarea.tarea
-                        .acciones
-                            if tarea.estado
-                                i.far.fa-check-circle.completo
-                            else 
-                                i.far.fa-check-circle
-                            i.fas.fa-trash
-              else 
+                if tareas.length
+                    each tarea in tareas
+                        li.tarea(data-tarea=tarea.id) 
+                            p= tarea.tarea
+                            .acciones
+                                if tarea.estado
+                                    i.far.fa-check-circle.completo
+                                else 
+                                    i.far.fa-check-circle
+                                i.fas.fa-trash  
+                else 
+                     p No hay tareas en este proyecto
+
+
+        .avance
+            h2 Avance del proyecto
+             #barra-avance.barra-avance
+                #porcentaje.porcentaje
+
 
         //acciones 
         .contenedor-acciones  
