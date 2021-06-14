@@ -15,7 +15,7 @@ exports.agregarTarea = async (req, res, next) => {
     //id del proyecto
     const ProyectoId = proyecto.id;
     //creando el recurso
-    const restultado = Tareas.create({ tarea, estado, ProyectoId });
+    const restultado = await Tareas.create({ tarea, estado, ProyectoId });
     //en caso que no haya que pase al siguiente middleware
     if (!restultado) next();
     //redireccion
